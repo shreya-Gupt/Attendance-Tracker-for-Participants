@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>GFG Club - Event Attendance Operations Suite</title>
+    <!-- Google Fonts, Font Awesome, Chart.js & QR Code Libs -->
+    <link
+      href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+  </head>
+  <body>
+    <div class="container">
+      <!-- Top Navigation Header -->
+      <header>
+        <div class="brand-title">
+          <i class="fa-solid fa-square-poll-vertical"></i>
+          <div>
+            <h1>GFG Club <span>Attendance Portal</span></h1>
+            <small>Technical Operations & Event Analytics</small>
+          </div>
+        </div>
+        <div class="header-actions">
+          <button
+            class="btn-theme-toggle"
+            id="themeToggle"
+            onclick="toggleDarkMode()"
+            title="Toggle Dark/Light Mode"
+          >
+            <i class="fa-solid fa-moon"></i>
+          </button>
+          <button class="btn-secondary" onclick="exportCSV()">
+            <i class="fa-solid fa-file-csv"></i> Export CSV
+          </button>
+        </div>
+      </header>
+
+      <!-- Stats & Analytics Grid -->
+      <div class="dashboard-top">
+        <div class="stats-grid">
+          <div class="stat-card stat-total">
+            <div class="stat-info">
+              <h4>Total Registered</h4>
+              <p id="totalCount">0</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-users"></i></div>
+          </div>
+          <div class="stat-card stat-present">
+            <div class="stat-info">
+              <h4>Present Today</h4>
+              <p id="presentCount">0</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-user-check"></i></div>
+          </div>
+          <div class="stat-card stat-absent">
+            <div class="stat-info">
+              <h4>Absent Today</h4>
+              <p id="absentCount">0</p>
+            </div>
+            <div class="stat-icon"><i class="fa-solid fa-user-xmark"></i></div>
+          </div>
+        </div>
+
+        <!-- Dynamic Chart Card -->
+        <div class="chart-card">
+          <h4>Live Attendance Ratio</h4>
+          <div class="chart-container">
+            <canvas id="attendanceChart"></canvas>
+          </div>
+        </div>
+      </div>
+
+      <!-- Main Workspace -->
+      <div class="content-grid">
+        <!-- Registration Form Card -->
+        <div class="card">
+          <h3>Register Participant</h3>
+          <form id="registerForm">
+            <div class="form-group">
+              <label for="pName">Full Name</label>
+              <input
+                type="text"
+                id="pName"
+                placeholder="e.g. Rahul Sharma"
+                required
+              />
+            </div>
+            <div class="form-group">
+              <label for="pId">Participant ID / Roll No</label>
+              <input
+                type="text"
+                id="pId"
+                placeholder="e.g. GFG-2026-01"
+                required
+              />
+            </div>
+            <button type="submit" class="btn-primary">
+              <i class="fa-solid fa-user-plus"></i> Register & Generate Pass
+            </button>
+          </form>
+        </div>
+
+        <!-- Records & Controls Section -->
+        <div class="records-container">
+          <div class="table-controls">
+            <div class="search-box">
+              <i class="fa-solid fa-magnifying-glass"></i>
+              <input
+                type="text"
+                id="searchInput"
+                placeholder="Search by name or ID..."
+                onkeyup="filterRecords()"
+              />
+            </div>
+            <div class="filter-tabs">
+              <button class="tab-btn active" onclick="setFilter('all', this)">
+                All
+              </button>
+              <button class="tab-btn" onclick="setFilter('Present', this)">
+                Present
+              </button>
+              <button class="tab-btn" onclick="setFilter('Absent', this)">
+                Absent
+              </button>
+              <button class="tab-btn" onclick="setFilter('Pending', this)">
+                Pending
+              </button>
+            </div>
+            <button class="btn-bulk" onclick="markAllPresent()">
+              <i class="fa-solid fa-check-double"></i> Mark All Present
+            </button>
+          </div>
+
+          <div class="table-wrapper">
+            <table>
+              <thead>
+                <tr>
+                  <th>Participant ID</th>
+                  <th>Name</th>
+                  <th>Status</th>
+                  <th>QR Pass</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody id="tableBody">
+                <!-- Injected dynamically -->
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- QR Code Modal Dialog -->
+    <div id="qrModal" class="modal">
+      <div class="modal-content">
+        <span class="close-btn" onclick="closeModal()">&times;</span>
+        <h3 id="modalName">Participant Name</h3>
+        <p id="modalId">ID: GFG-000</p>
+        <div id="qrcode"></div>
+        <small>Scan code at venue gate for check-in</small>
+      </div>
+    </div>
+
+    <script src="script.js"></script>
+  </body>
+</html>
